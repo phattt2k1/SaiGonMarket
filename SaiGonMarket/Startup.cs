@@ -28,14 +28,14 @@ namespace SaiGonMarket
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var stringConnectdb = Configuration.GetConnectionString("dbMarkets"); 
+            var stringConnectdb = Configuration.GetConnectionString("dbMarkets");
             services.AddDbContext<dbMarketsContext>(options => options.UseSqlServer(stringConnectdb));
 
             //Unicode
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.All }));
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
