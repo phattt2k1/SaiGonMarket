@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using SaiGonMarket.Helpper;
 using SaiGonMarket.Models;
 
 namespace SaiGonMarket.Areas.Admin.Controllers
@@ -47,10 +49,23 @@ namespace SaiGonMarket.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PageId,PageName,Contents,Thumb,Published,Title,MetaDesc,MetaKey,Alias,CreatedDate,Ordering")] Page page)
+        public async Task<IActionResult> Create([Bind("PageId,PageName,Contents,Thumb,Published,Title,MetaDesc,MetaKey,Alias,CreatedDate,Ordering")] Page page, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
             if (ModelState.IsValid)
             {
+                //Xu ly thumb
+                if (fThumb != null)
+                {
+                    //Lay ra extension
+                    string extension = Path.GetExtension(fThumb.FileName);
+                    //Chuan hoa sau do them extension
+                    string imageName = Utilities.SEOUrl(page.PageName) + extension;
+                    //Upload hinh anh
+                    page.Thumb = await Utilities.UploadFile(fThumb, @"pages", imageName.ToLower());
+                }
+
+                if (string.IsNullOrEmpty(page.Thumb)) page.Thumb = "default.jpg";
+
                 _context.Add(page);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -79,7 +94,7 @@ namespace SaiGonMarket.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PageId,PageName,Contents,Thumb,Published,Title,MetaDesc,MetaKey,Alias,CreatedDate,Ordering")] Page page)
+        public async Task<IActionResult> Edit(int id, [Bind("PageId,PageName,Contents,Thumb,Published,Title,MetaDesc,MetaKey,Alias,CreatedDate,Ordering")] Page page, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
             if (id != page.PageId)
             {
@@ -90,6 +105,19 @@ namespace SaiGonMarket.Areas.Admin.Controllers
             {
                 try
                 {
+                    //Xu ly thumb
+                    if (fThumb != null)
+                    {
+                        //Lay ra extension
+                        string extension = Path.GetExtension(fThumb.FileName);
+                        //Chuan hoa sau do them extension
+                        string imageName = Utilities.SEOUrl(page.PageName) + extension;
+                        //Upload hinh anh
+                        page.Thumb = await Utilities.UploadFile(fThumb, @"pages", imageName.ToLower());
+                    }
+
+                    if (string.IsNullOrEmpty(page.Thumb)) page.Thumb = "default.jpg";
+
                     _context.Update(page);
                     await _context.SaveChangesAsync();
                 }

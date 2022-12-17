@@ -5,8 +5,10 @@
     ViewData["Title"] = "Product List" + CurrentPage;
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
+
+
 <div class="page-header">
-    <h2 class="header-title">Orders List</h2>
+    <h2 class="header-title">Product List</h2>
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-area="Admin" asp-controller="Home" asp-action="Index"
@@ -18,14 +20,22 @@
 <div class="card">
     <div class="card-body">
         <div class="row m-b-30">
-            <div class="col-lg-8">
-                <div class="d-md-flex">
-                    <div class="m-b-10 m-r-15">
-                        <select class="custom-select" id="txtCatID" name="txtCatID" style="min-width: 200px;" asp-items="ViewBag.DanhMuc">
-                            <option selected>Catergory</option>
-                            <option value="0">All</option>
-                        </select>
-                    </div>               
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-affix m-v-10">
+                            <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                            <input id="keyword" name="keyword" type="text" class="form-control" placeholder="Search Product">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-affix m-v-10">
+                            <select class="custom-select" id="txtCatID" name="txtCatID" style="min-width: 200px;" asp-items="ViewBag.DanhMuc">
+                                <option selected>Catergory</option>
+                                <option value="0">All</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4 text-right">
@@ -47,7 +57,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="records_table">
                     @if (Model != null)
                     {
                         foreach (var item in Model)
@@ -105,32 +115,50 @@
 </div>
 
 @section Scripts {
-<script>
-    $(document).ready(function () {
-        jQuery("#").change(function () {
-            var catID = jQuery(this).children(":selected").attr("value");
-            catID = parseFloat(catID);
-            $('#txtCatID option')
-                .removeAttr('selected');
-            $("#txtCatID > [value=" + catID + "]").attr("selected", "true");
-            $.ajax({
-                url: '/Admin/AdminProducts/Filtter',
-                dataType: "json",
-                type: "GET",
-                data: {
-                    CatID: catID
-                },
-                async: true,
-                success: function (results) {
-                    if (results.status == "success") {
-                        window.location.href = results.redirectUrl;
+    <script>
+        $(document).ready(function () {
+            jQuery("#txtCatID").change(function () {
+                var catID = jQuery(this).children(":selected").attr("value");
+                catID = parseFloat(catID);
+                $('#txtCatID option')
+                    .removeAttr('selected');
+                $("#txtCatID > [value=" + catID + "]").attr("selected", "true");
+                $.ajax({
+                    url: '/Admin/AdminProducts/Filtter',
+                    datatype: "json",
+                    type: "GET",
+                    data: {
+                        CatID: catID
+                    },
+                    async: true,
+                    success: function (results) {
+                        if (results.status == "success") {
+                            window.location.href = results.redirectUrl;
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
                     }
-                },
-                error: function (xhr) {
-                    alert('error');
-                }
+                });
+            });
+
+            $("#keyword").keyup(function () {
+                var strkeyword = $("#keyword").val();
+                $.ajax({
+                    url: '/Admin/Search/FindProduct/',
+                    datatype: "json",
+                    type: "POST",
+                    data: { keyword: strkeyword },
+                    async: true,
+                    success: function (results) {
+                        $("#records_table").html("");
+                        $("#records_table").html(results);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 }

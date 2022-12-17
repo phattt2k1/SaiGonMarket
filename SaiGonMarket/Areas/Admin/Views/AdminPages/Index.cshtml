@@ -1,7 +1,7 @@
 ﻿@using PagedList.Core.Mvc
 @model PagedList.Core.IPagedList<SaiGonMarket.Models.Page>
 @{
-    ViewData["Title"] = "Pages";
+    ViewData["Title"] = "Page list - Page: " + @ViewBag.CurrentPage;
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 <!-- Header -->
@@ -10,7 +10,7 @@
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-area="Admin" asp-controller="Home" asp-action="Index"
                class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-            <span class="breadcrumb-item active">Page List : page @ViewBag.CurrentPage</span>
+            <span class="breadcrumb-item active">Page list : page @ViewBag.CurrentPage</span>
         </nav>
     </div>
 </div>
