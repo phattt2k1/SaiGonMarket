@@ -1,4 +1,4 @@
-﻿@model SaiGonMarket.Models.TblTinTuc
+﻿@model SaiGonMarket.Models.Category
 
 @{
     ViewData["Title"] = "Create";
@@ -14,12 +14,12 @@
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-area="Admin" asp-controller="Home" asp-action="Index"
                class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-            <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminTblTinTucs" asp-action="Index">News List</a>
-            <span class="breadcrumb-item active">Add Post</span>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminCategories" asp-action="Index">Category List</a>
+            <span class="breadcrumb-item active">Add Category</span>
         </nav>
     </div>
 </div>
-<form asp-controller="AdminTblTinTucs" asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-controller="AdminCategories" asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="page-header no-gutters has-tab">
         <div class="d-md-flex m-b-15 align-items-center justify-content-between">
@@ -34,7 +34,7 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#product-edit-basic">Post Info</a>
+                <a class="nav-link active" data-toggle="tab" href="#product-edit-basic">Category Info</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#product-edit-option">SEO Info</a>
@@ -49,8 +49,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-group">
-                        <label class="font-weight-semibold" for="productName">Title</label>
-                        <input type="text" class="form-control" asp-for="Title">
+                        <label class="font-weight-semibold" for="productName">Cat Name</label>
+                        <input type="text" class="form-control" asp-for="CatName">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Ordering</label>
+                        <input type="text" class="form-control" asp-for="Ordering">
                     </div>
                     <div class="form-group">
                         <label class="font-weight-semibold" for="productBrand">Avatar</label>
@@ -65,28 +69,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group d-flex align-items-center">
-                            <div class="checkbox">
-                                <input asp-for="IsHot" type="checkbox">
-                                <label for="IsHot">IsHot</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group d-flex align-items-center">
-                            <div class="checkbox">
-                                <input asp-for="IsNewfeed" type="checkbox">
-                                <label for="IsNewfeed">IsNewfeed</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="product-edit-option">
             <div class="card">
                 <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productSize">Title</label>
+                        <input type="text" class="form-control" asp-for="Title">
+                    </div>
                     <div class="form-group">
                         <label class="font-weight-semibold" for="productSize">MetaDesc</label>
                         <input type="text" class="form-control" asp-for="MetaDesc">
@@ -95,6 +87,10 @@
                         <label class="font-weight-semibold" for="productFit">MetaKey</label>
                         <input type="text" class="form-control" asp-for="MetaKey">
                     </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productFit">Schema Markup</label>
+                        <input type="text" class="form-control" asp-for="SchemaMarkup">
+                    </div>
                 </div>
             </div>
 
@@ -102,7 +98,7 @@
         <div class="tab-pane fade" id="product-edit-description">
             <div class="card">
                 <div class="card-body">
-                    <textarea class="summernot" asp-for="Contents"></textarea>
+                    <textarea class="summernot" asp-for="Description"></textarea>
                 </div>
             </div>
         </div>

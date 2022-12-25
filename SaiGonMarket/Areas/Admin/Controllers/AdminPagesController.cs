@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,11 @@ namespace SaiGonMarket.Areas.Admin.Controllers
     public class AdminPagesController : Controller
     {
         private readonly dbMarketsContext _context;
-
-        public AdminPagesController(dbMarketsContext context)
+        public INotyfService _notyfService { get; }
+        public AdminPagesController(dbMarketsContext context, INotyfService notyfService)
         {
             _context = context;
+            _notyfService = notyfService;
         }
 
         // GET: Admin/AdminPages
@@ -36,6 +38,24 @@ namespace SaiGonMarket.Areas.Admin.Controllers
 
             ViewBag.CurrentPage = pageNumber;
             return View(models);
+        }
+
+        // GET: Admin/AdminPages/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var page = await _context.Pages
+                .FirstOrDefaultAsync(m => m.PageId == id);
+            if (page == null)
+            {
+                return NotFound();
+            }
+
+            return View(page);
         }
 
         // GET: Admin/AdminPages/Create
@@ -65,9 +85,10 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                 }
 
                 if (string.IsNullOrEmpty(page.Thumb)) page.Thumb = "default.jpg";
-
+                page.Alias = Utilities.SEOUrl(page.PageName);
                 _context.Add(page);
                 await _context.SaveChangesAsync();
+                _notyfService.Success("Created successfully");
                 return RedirectToAction(nameof(Index));
             }
             return View(page);
@@ -117,9 +138,10 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                     }
 
                     if (string.IsNullOrEmpty(page.Thumb)) page.Thumb = "default.jpg";
-
+                    page.Alias = Utilities.SEOUrl(page.PageName);
                     _context.Update(page);
                     await _context.SaveChangesAsync();
+                    _notyfService.Success("Updated successfully");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -163,6 +185,7 @@ namespace SaiGonMarket.Areas.Admin.Controllers
             var page = await _context.Pages.FindAsync(id);
             _context.Pages.Remove(page);
             await _context.SaveChangesAsync();
+            _notyfService.Success("Deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 

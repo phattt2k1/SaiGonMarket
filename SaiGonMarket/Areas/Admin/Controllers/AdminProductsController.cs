@@ -129,7 +129,7 @@ namespace SaiGonMarket.Areas.Admin.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                _notyfService.Success("Create successfully");
+                _notyfService.Success("Created successfully");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DanhMuc"] = new SelectList(_context.Categories, "CatId", "CatName", product.CatId);
@@ -181,7 +181,7 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                     product.Alias = Utilities.SEOUrl(product.ProductName);
                     product.DateModified = DateTime.Now;
                     _context.Update(product);
-                    _notyfService.Success("Update successfully");
+                    _notyfService.Success("Updated successfully");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -228,7 +228,7 @@ namespace SaiGonMarket.Areas.Admin.Controllers
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
-            _notyfService.Success("Delete successfully");
+            _notyfService.Success("Deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 

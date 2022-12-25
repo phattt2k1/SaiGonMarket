@@ -14,44 +14,33 @@ using SaiGonMarket.Models;
 namespace SaiGonMarket.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AdminTblTinTucsController : Controller
+    public class AdminCategoriesController : Controller
     {
         private readonly dbMarketsContext _context;
         public INotyfService _notyfService { get; }
-        public AdminTblTinTucsController(dbMarketsContext context, INotyfService notyfService)
+        public AdminCategoriesController(dbMarketsContext context, INotyfService notyfService)
         {
             _context = context;
             _notyfService = notyfService;
         }
 
-        // GET: Admin/AdminTblTinTucs
+        // GET: Admin/  
         public IActionResult Index(int? page)
         {
-            var collection = _context.TblTinTucs.AsNoTracking().ToList();
-            foreach (var item in collection)
-            {
-                if (item.CreatedDate == null)
-                {
-                    item.CreatedDate = DateTime.Now;
-                    _context.Update(item);
-                    _context.SaveChanges();
-                }
-            }
-
             //Phan trang
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
-            var pageSize = 10;
-            var lsPosts = _context.TblTinTucs
+            var pageSize = 20;
+            var lsCategorys = _context.Categories
                 .AsNoTracking()
-                .OrderByDescending(x => x.PostId);
+                .OrderByDescending(x => x.CatId);
 
-            PagedList<TblTinTuc> models = new PagedList<TblTinTuc>(lsPosts, pageNumber, pageSize);
+            PagedList<Category> models = new PagedList<Category>(lsCategorys, pageNumber, pageSize);
 
             ViewBag.CurrentPage = pageNumber;
             return View(models);
         }
 
-        // GET: Admin/AdminTblTinTucs/Details/5
+        // GET: Admin/AdminCategories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,28 +48,28 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var tblTinTuc = await _context.TblTinTucs
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (tblTinTuc == null)
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.CatId == id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(tblTinTuc);
+            return View(category);
         }
 
-        // GET: Admin/AdminTblTinTucs/Create
+        // GET: Admin/AdminCategories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/AdminTblTinTucs/Create
+        // POST: Admin/AdminCategories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,Scontents,Contents,Thumb,Published,Alias,CreatedDate,Author,AccountId,Tags,CatId,IsHot,IsNewfeed,MetaKey,MetaDesc,Views")] TblTinTuc tblTinTuc, Microsoft.AspNetCore.Http.IFormFile fThumb)
+        public async Task<IActionResult> Create([Bind("CatId,CatName,Description,ParentId,Levels,Ordering,Published,Thumb,Title,Alias,MetaDesc,MetaKey,Cover,SchemaMarkup")] Category category, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
             if (ModelState.IsValid)
             {
@@ -90,23 +79,23 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                     //Lay ra extension
                     string extension = Path.GetExtension(fThumb.FileName);
                     //Chuan hoa sau do them extension
-                    string imageName = Utilities.SEOUrl(tblTinTuc.Title) + extension;
+                    string imageName = Utilities.SEOUrl(category.CatName) + extension;
                     //Upload hinh anh
-                    tblTinTuc.Thumb = await Utilities.UploadFile(fThumb, @"news", imageName.ToLower());
+                    category.Thumb = await Utilities.UploadFile(fThumb, @"categories", imageName.ToLower());
                 }
 
-                if (string.IsNullOrEmpty(tblTinTuc.Thumb)) tblTinTuc.Thumb = "default.jpg";
-                tblTinTuc.Alias = Utilities.SEOUrl(tblTinTuc.Title);
-                tblTinTuc.CreatedDate = DateTime.Now;   
-                _context.Add(tblTinTuc);
+                if (string.IsNullOrEmpty(category.Thumb)) category.Thumb = "default.jpg";
+                category.Alias = Utilities.SEOUrl(category.CatName);
+
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 _notyfService.Success("Created successfully");
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblTinTuc);
+            return View(category);
         }
 
-        // GET: Admin/AdminTblTinTucs/Edit/5
+        // GET: Admin/AdminCategories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -114,22 +103,22 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var tblTinTuc = await _context.TblTinTucs.FindAsync(id);
-            if (tblTinTuc == null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(tblTinTuc);
+            return View(category);
         }
 
-        // POST: Admin/AdminTblTinTucs/Edit/5
+        // POST: Admin/AdminCategories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,Scontents,Contents,Thumb,Published,Alias,CreatedDate,Author,AccountId,Tags,CatId,IsHot,IsNewfeed,MetaKey,MetaDesc,Views")] TblTinTuc tblTinTuc, Microsoft.AspNetCore.Http.IFormFile fThumb)
+        public async Task<IActionResult> Edit(int id, [Bind("CatId,CatName,Description,ParentId,Levels,Ordering,Published,Thumb,Title,Alias,MetaDesc,MetaKey,Cover,SchemaMarkup")] Category category, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
-            if (id != tblTinTuc.PostId)
+            if (id != category.CatId)
             {
                 return NotFound();
             }
@@ -144,21 +133,21 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                         //Lay ra extension
                         string extension = Path.GetExtension(fThumb.FileName);
                         //Chuan hoa sau do them extension
-                        string imageName = Utilities.SEOUrl(tblTinTuc.Title) + extension;
+                        string imageName = Utilities.SEOUrl(category.CatName) + extension;
                         //Upload hinh anh
-                        tblTinTuc.Thumb = await Utilities.UploadFile(fThumb, @"news", imageName.ToLower());
+                        category.Thumb = await Utilities.UploadFile(fThumb, @"categories", imageName.ToLower());
                     }
 
-                    if (string.IsNullOrEmpty(tblTinTuc.Thumb)) tblTinTuc.Thumb = "default.jpg";
-                    tblTinTuc.Alias = Utilities.SEOUrl(tblTinTuc.Title);
+                    if (string.IsNullOrEmpty(category.Thumb)) category.Thumb = "default.jpg";
+                    category.Alias = Utilities.SEOUrl(category.CatName);
 
-                    _context.Update(tblTinTuc);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                     _notyfService.Success("Updated successfully");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TblTinTucExists(tblTinTuc.PostId))
+                    if (!CategoryExists(category.CatId))
                     {
                         return NotFound();
                     }
@@ -169,10 +158,10 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblTinTuc);
+            return View(category);
         }
 
-        // GET: Admin/AdminTblTinTucs/Delete/5
+        // GET: Admin/AdminCategories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,31 +169,31 @@ namespace SaiGonMarket.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var tblTinTuc = await _context.TblTinTucs
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (tblTinTuc == null)
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.CatId == id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(tblTinTuc);
+            return View(category);
         }
 
-        // POST: Admin/AdminTblTinTucs/Delete/5
+        // POST: Admin/AdminCategories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblTinTuc = await _context.TblTinTucs.FindAsync(id);
-            _context.TblTinTucs.Remove(tblTinTuc);
+            var category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             _notyfService.Success("Deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TblTinTucExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.TblTinTucs.Any(e => e.PostId == id);
+            return _context.Categories.Any(e => e.CatId == id);
         }
     }
 }
