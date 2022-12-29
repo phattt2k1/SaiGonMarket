@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SaiGonMarket.ModelViews;
 
 #nullable disable
 
@@ -370,5 +371,7 @@ namespace SaiGonMarket.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<SaiGonMarket.ModelViews.RegisterVM> RegisterVM { get; set; }
     }
 }

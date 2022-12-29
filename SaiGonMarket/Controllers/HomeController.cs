@@ -23,7 +23,7 @@ namespace SaiGonMarket.Controllers
         }
         public IActionResult Index()
         {
-            HomeViewVM model = new HomeViewVM();
+            HomeVM model = new HomeVM();
 
             var lsProducts = _context.Products.AsNoTracking()
                 .Where(x => x.Active == true && x.HomeFlag == true)
