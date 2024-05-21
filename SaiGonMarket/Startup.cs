@@ -40,8 +40,8 @@ namespace SaiGonMarket
                 {
                     p.Cookie.Name = "UserLoginCookie";
                     p.ExpireTimeSpan = TimeSpan.FromDays(1);
-                    p.LoginPath = "/login.html";
-                    p.LogoutPath = "/logout.html";
+                    //p.LoginPath = "/login.html";
+                    //p.LogoutPath = "/logout.html";
                     p.AccessDeniedPath = "/not-found.html";
                 });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

@@ -1,10 +1,7 @@
 ﻿@model SaiGonMarket.ModelViews.MuaHangVM
-@{
-    ViewData["Title"] = "Mua hàng";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    List<SaiGonMarket.ModelViews.CartItem> Carts = ViewBag.GioHang;
-}
-
+@{ ViewData["Title"] = "Mua hàng";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+                List<SaiGonMarket.ModelViews.CartItem> Carts = ViewBag.GioHang; }
 @section Styles{
     <style type="text/css">
         .nice-select .list {
@@ -34,7 +31,7 @@
                         <h2 class="breadcrumb-heading">THÔNG TIN MUA HÀNG</h2>
                         <ul>
                             <li>
-                                <a href="/">HOME <i class="pe-7s-angle-right"></i></a>
+                                <a href="/">Trang chủ <i class="pe-7s-angle-right"></i></a>
                             </li>
                             <li>THÔNG TIN MUA HÀNG</li>
                         </ul>
@@ -71,30 +68,6 @@
                                         <input asp-for="Address" placeholder="Địa chỉ nhận hàng" type="text">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="country-select">
-                                        <label>City<span class="required">*</span></label>
-                                        <select asp-for="TinhThanh" class="myniceselect nice-select wide" asp-items="ViewBag.lsTinhThanh">
-                                            <option value="0" disabled selected>City</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="country-select clearfix">
-                                        <label>District<span class="required">*</span></label>
-                                        <select asp-for="QuanHuyen" class="myniceselect wide">
-                                            <option value="0" disabled selected>District</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="country-select">
-                                        <label>Ward<span class="required">*</span></label>
-                                        <select asp-for="PhuongXa" class="myniceselect nice-select wide">
-                                            <option value="0" disabled selected>Ward</option>
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,15 +87,14 @@
                                         {
                                             foreach (var item in Carts)
                                             {
-                                                <tr class="cart_item">
-                                                    <td class="cart-product-name">
-                                                        @item.product.ProductName<strong class="product-quantity">
-                                                            × @item.amount
-                                                        </strong>
-                                                    </td>
-                                                    <td class="cart-product-total"><span class="amount">@item.TotalMoney.ToString("#,##0") VNĐ</span></td>
-                                                </tr>
-                                            }
+                            <tr class="cart_item">
+                                <td class="cart-product-name">
+                                    @item.product.ProductName<strong class="product-quantity">
+                                        × @item.amount
+                                    </strong>
+                                </td>
+                                <td class="cart-product-total"><span class="amount">@item.TotalMoney.ToString("#,##0") VNĐ</span></td>
+                            </tr>}
                                         }
 
 
@@ -135,6 +107,7 @@
                                     </tfoot>
                                 </table>
                             </div>
+                            <h5 style="color:red">Vui lòng chọn hình thức thanh toán</h5>
                             <div class="payment-method">
                                 <div class="payment-accordion">
                                     <div id="accordion">
@@ -167,8 +140,8 @@
                                                     <p>
                                                         Thông tin tài khoản ngân hàng
                                                     </p>
-                                                    <p>Chủ tài khoản: Trần Thành Phát</p>
-                                                    <p>Số tài khoản: 050115737233 - Ngân hàng Saccombank</p>
+                                                    <p>Chủ tài khoản: Dương Phương Duy</p>
+                                                    <p>Số tài khoản: 0963102916 - Ngân hàng VietcomBank</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,8 +156,8 @@
                                             <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
                                                 <div class="card-body">
                                                     <p>Thông tin MOMO</p>
-                                                    <p>Chủ tài khoản: Trần Thành Phát</p>
-                                                    <p>Số điện thoại: 0919192917</p>
+                                                    <p>Chủ tài khoản: Dương Phương Duy</p>
+                                                    <p>Số điện thoại: 0963102916</p>
 
                                                 </div>
                                             </div>
@@ -203,55 +176,3 @@
         </div>
     </div>
 </main>
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('select').niceSelect();
-            $(function () {
-                $("#TinhThanh").change(function () {
-                    var locationid = $("#TinhThanh").val();
-                    $.ajax({
-                        url: '/Location/QuanHuyenList',
-                        type: "GET",
-                        dataType: "JSON",
-                        data: { LocationId: locationid },
-                        success: function (QuanHuyens) {
-                            $("#QuanHuyen").empty();
-                            $("#PhuongXa").empty();
-                            var strPhuongXa = '<option value="" disabled selected>Ward</option>';
-                            $("#PhuongXa").append(strPhuongXa);
-                            var strQuanHuyen = '<option value="" disabled selected>District</option>';
-                            $("#QuanHuyen").append(strQuanHuyen);
-                            $.each(QuanHuyens, function (i, item) {
-                                var option = '<option value = "' + item.locationId + '">' + item.nameWithType + '</option> ';
-                                $("#QuanHuyen").append(option);
-                            });
-                            $('select').niceSelect('update');
-                        }
-                    });
-                });
-
-                $("#QuanHuyen").change(function () {
-                    var locationid = $("#QuanHuyen").val();
-                    $.ajax({
-                        url: '/Location/PhuongXaList',
-                        type: "GET",
-                        dataType: "JSON",
-                        data: { LocationId: locationid },
-                        success: function (PhuongXaList) {
-                            $("#PhuongXa").empty();
-                            var readonly = '<option value="" disabled selected>Ward</option>';
-                            $("#PhuongXa").append(readonly);
-                            $.each(PhuongXaList, function (i, item) {
-                                var option = '<option value = "' + item.locationId + '">' + item.nameWithType + '</option> ';
-                                $("#PhuongXa").append(option);
-                            });
-                            $('select').niceSelect('update');
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-}
-

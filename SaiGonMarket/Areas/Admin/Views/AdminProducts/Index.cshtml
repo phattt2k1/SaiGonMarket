@@ -13,7 +13,7 @@
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-area="Admin" asp-controller="Home" asp-action="Index"
                class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-            <span class="breadcrumb-item active">Product List : page @CurrentPage</span>
+            <span class="breadcrumb-item active">Danh sách sản phẩm : page @CurrentPage</span>
         </nav>
     </div>
 </div>
@@ -31,8 +31,8 @@
                     <div class="col-md-6">
                         <div class="input-affix m-v-10">
                             <select class="custom-select" id="txtCatID" name="txtCatID" style="min-width: 200px;" asp-items="ViewBag.DanhMuc">
-                                <option selected>Catergory</option>
-                                <option value="0">All</option>
+                                <option selected>Danh mục</option>
+                                <option value="0">Tất cả</option>
                             </select>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="col-lg-4 text-right">
                 <a class="btn btn-primary" asp-controller="AdminProducts" asp-action="Create">
-                    <i class="anticon anticon-plus-circle m-r-5"></i> <span>Add Product</span>
+                    <i class="anticon anticon-plus-circle m-r-5"></i> <span>Thêm sản phẩm</span>
                 </a>
             </div>
         </div>

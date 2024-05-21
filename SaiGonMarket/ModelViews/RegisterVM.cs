@@ -13,30 +13,30 @@ namespace SaiGonMarket.ModelViews
         public int CustomerId { get; set; }
 
         [Display(Name = "Full name")]
-        [Required(ErrorMessage = "Please enter your full name")]
+        [Required(ErrorMessage = "Vui lòng nhập họ tên")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Please enter your Email")]
+        [Required(ErrorMessage = "Vui lòng nhập Email")]
         [MaxLength(150)]
         [DataType(DataType.EmailAddress)]
         [Remote(action: "ValidateEmail", controller: "Accounts")]
         public string Email { get; set; }
 
         [MaxLength(11)]
-        [Required(ErrorMessage = "Please enter your phone number")]
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         [Display(Name = "Phone number")]
         [DataType(DataType.PhoneNumber)]
         [Remote(action: "ValidatePhone", controller: "Accounts")]
         public string Phone { get; set; }
 
         [Display(Name = "Password")]
-        [Required(ErrorMessage = "Please enter your password")]
-        [MinLength(8, ErrorMessage = "Your password must be at least 8 characters")]
+        [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
+        [MinLength(8, ErrorMessage = "Mật khẩu tối thiểu 8 ký tự")]
         public string Password { get; set; }
 
-        [MinLength(8, ErrorMessage = "Your password must be at least 8 characters")]
-        [Display(Name = "Re-enter your password")]
-        [Compare("Password", ErrorMessage = "Please enter the same password")]
+        [MinLength(8, ErrorMessage = "Mật khẩu tối thiểu 8 ký tự")]
+        [Display(Name = "Nhập lại mật khẩu")]
+        [Compare("Password", ErrorMessage = "Vui lòng nhập đúng mật khẩu")]
         public string ConfirmPassword { get; set; }
     }
 }

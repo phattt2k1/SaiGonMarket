@@ -38,7 +38,10 @@
         @await Html.PartialAsync("_HeaderPartialView.cshtml")
         <!-- Main Header Area End Here -->
 
+
+
         @RenderBody()
+
 
         <!-- Begin Footer Area -->
         @await Html.PartialAsync("_FooterPartialView.cshtml")
@@ -75,7 +78,6 @@
     @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
     @await RenderSectionAsync("Styles", required: false)
-
 </body>
 
 </html>

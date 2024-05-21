@@ -11,10 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using SaiGonMarket.Models;
 
-namespace WebShop.Areas.Admin.Controllers
+namespace SaiGonMarket.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin")]
+    [Authorize]
     public class AdminOrdersController : Controller
     {
         private readonly dbMarketsContext _context;
@@ -135,31 +135,31 @@ namespace WebShop.Areas.Admin.Controllers
             return PartialView("ChangeStatus", order);
         }
 
-        //// GET: Admin/AdminOrders/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
-        //    ViewData["TransactStatusId"] = new SelectList(_context.TransactStatuses, "TransactStatusId", "TransactStatusId");
-        //    return View();
-        //}
+        // GET: Admin/AdminOrders/Create
+        public IActionResult Create()
+        {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
+            ViewData["TransactStatusId"] = new SelectList(_context.TransactStatuses, "TransactStatusId", "TransactStatusId");
+            return View();
+        }
 
-        //// POST: Admin/AdminOrders/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("OrderId,CustomerId,OrderDate,ShipDate,TransactStatusId,Deleted,Paid,PaymentDate,TotalMoney,PaymentId,Note,Address,LocationId,District,Ward")] Order order)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(order);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", order.CustomerId);
-        //    ViewData["TransactStatusId"] = new SelectList(_context.TransactStatuses, "TransactStatusId", "TransactStatusId", order.TransactStatusId);
-        //    return View(order);
-        //}
+        // POST: Admin/AdminOrders/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("OrderId,CustomerId,OrderDate,ShipDate,TransactStatusId,Deleted,Paid,PaymentDate,TotalMoney,PaymentId,Note,Address,LocationId,District,Ward")] Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", order.CustomerId);
+            ViewData["TransactStatusId"] = new SelectList(_context.TransactStatuses, "TransactStatusId", "TransactStatusId", order.TransactStatusId);
+            return View(order);
+        }
 
         // GET: Admin/AdminOrders/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -250,7 +250,8 @@ namespace WebShop.Areas.Admin.Controllers
         {
             var order = await _context.Orders.FindAsync(id);
             order.Deleted = true;
-            _context.Update(order);
+            order.TransactStatusId = 5;
+            _context.Remove(order);
             await _context.SaveChangesAsync();
             _notyfService.Success("Xóa đơn hàng thành công");
             return RedirectToAction(nameof(Index));

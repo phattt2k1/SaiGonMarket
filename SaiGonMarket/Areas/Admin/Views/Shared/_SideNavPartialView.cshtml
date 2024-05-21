@@ -6,7 +6,7 @@
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>
                     </span>
-                    <span class="title">Dashboard</span>
+                    <span class="title">Trang chủ</span>
                     <span class="arrow">
                         <i class="arrow-icon"></i>
                     </span>
@@ -26,143 +26,46 @@
 
             <!-- Products -->
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
+                <a class="dropdown-toggle" asp-area="Admin" asp-controller="AdminProducts" asp-action="Index">
                     <span class="icon-holder">
                         <i class="anticon anticon-shop"></i>
                     </span>
-                    <span class="title">Products</span>
-                    <span class="arrow">
-                        <i class="arrow-icon"></i>
-                    </span>
+                    <span class="title">Danh sách sản phẩm</span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index">Danh sách sản phẩm</a>
-                    </li>
-                </ul>
             </li>
 
             <!-- Customers -->
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-hdd"></i>
-                    </span>
-                    <span class="title">Customers</span>
-                    <span class="arrow">
-                        <i class="arrow-icon"></i>
-                    </span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a asp-area="Admin" asp-controller="AdminCustomers" asp-action="Index">Danh sách khách hàng</a>
-                    </li>
-                    <li>
-                        <a href="carousel.html">Search For Customers</a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Sales -->
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
+                <a class="dropdown-toggle" asp-area="Admin" asp-controller="AdminCustomers" asp-action="Index">
                     <span class="icon-holder">
                         <i class="anticon anticon-form"></i>
                     </span>
-                    <span class="title">Sales</span>
-                    <span class="arrow">
-                        <i class="arrow-icon"></i>
-                    </span>
+                    <span class="title">Danh sách khách hàng</span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="form-elements.html">Form Elements</a>
-                    </li>
-                    <li>
-                        <a href="form-layouts.html">Form Layouts</a>
-                    </li>
-                    <li>
-                        <a href="form-validation.html">Form Validation</a>
-                    </li>
-                </ul>
             </li>
-
             <!-- System -->
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
                         <i class="anticon anticon-table"></i>
                     </span>
-                    <span class="title">System</span>
+                    <span class="title">Hệ thống</span>
                     <span class="arrow">
                         <i class="arrow-icon"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a asp-area="Admin" asp-controller="AdminAccounts" asp-action="Index">Accounts</a>
+                        <a asp-area="Admin" asp-controller="AdminAccounts" asp-action="Index">Tài khoản quản trị</a>
                     </li>
                     <li>
-                        <a asp-area="Admin" asp-controller="AdminCategories" asp-action="Index">Category</a>
+                        <a asp-area="Admin" asp-controller="AdminCategories" asp-action="Index">Danh mục sản phẩm</a>
                     </li>
                     <li>
-                        <a asp-area="Admin" asp-controller="AdminRoles" asp-action="Index">Access rights</a>
-                    </li>
-                    <li>
-                        <a href="data-table.html">Location</a>
+                        <a asp-area="Admin" asp-controller="AdminRoles" asp-action="Index">Quyền truy cập</a>
                     </li>
                 </ul>
             </li>
-
-            <!-- Shippers -->
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-file"></i>
-                    </span>
-                    <span class="title">Shippers</span>
-                    <span class="arrow">
-                        <i class="arrow-icon"></i>
-                    </span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="profile.html">Profile</a>
-                    </li>
-                    <li>
-                        <a href="invoice.html">Invoice</a>
-                    </li>
-                    <li>
-                        <a href="members.html">Members</a>
-                    </li>
-                    <li>
-                        <a href="pricing.html">Pricing</a>
-                    </li>
-                    <li>
-                        <a href="setting.html">Setting</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="javascript:void(0);">
-                            <span>Blog</span>
-                            <span class="arrow">
-                                <i class="arrow-icon"></i>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="blog-grid.html">Blog Grid</a>
-                            </li>
-                            <li>
-                                <a href="blog-list.html">Blog List</a>
-                            </li>
-                            <li>
-                                <a href="blog-post.html">Blog Post</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
             <!-- News -->
             <li class="nav-item">
                 <a class="dropdown-toggle" asp-area="Admin" asp-controller="AdminTblTinTucs" asp-action="Index">

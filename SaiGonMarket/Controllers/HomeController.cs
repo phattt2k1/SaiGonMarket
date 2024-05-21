@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using SaiGonMarket.Models;
-using SaiGonMarket.ModelViews;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SaiGonMarket.Models;
+using SaiGonMarket.ModelViews;
 
 namespace SaiGonMarket.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly dbMarketsContext _context;
         private readonly ILogger<HomeController> _logger;
+        private readonly dbMarketsContext _context;
 
         public HomeController(ILogger<HomeController> logger, dbMarketsContext context)
         {
             _logger = logger;
             _context = context;
         }
+
         public IActionResult Index()
         {
             HomeVM model = new HomeVM();
@@ -31,7 +32,6 @@ namespace SaiGonMarket.Controllers
                 .ToList();
 
             List<ProductHomeVM> lsProductViews = new List<ProductHomeVM>();
-
             var lsCats = _context.Categories
                 .AsNoTracking()
                 .Where(x => x.Published == true)
@@ -44,32 +44,32 @@ namespace SaiGonMarket.Controllers
                 productHome.category = item;
                 productHome.lsProducts = lsProducts.Where(x => x.CatId == item.CatId).ToList();
                 lsProductViews.Add(productHome);
+
+                var quangcao = _context.QuangCaos
+                    .AsNoTracking()
+                    .FirstOrDefault(x => x.Active == true);
+
+                var TinTuc = _context.TblTinTucs
+                    .AsNoTracking()
+                    .Where(x => x.Published == true && x.IsNewfeed == true)
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(3)
+                    .ToList();
+                model.Products = lsProductViews;
+                model.quangcao = quangcao;
+                model.TinTucs = TinTuc;
+                ViewBag.AllProducts = lsProducts;
             }
-
-            var quangcao = _context.QuangCaos
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Active == true);
-
-            var TinTuc = _context.TblTinTucs
-                .AsNoTracking()
-                .Where(x => x.Published == true && x.IsNewfeed == true)
-                .OrderByDescending(x => x.CreatedDate)
-                .Take(3)
-                .ToList();
-            model.Products = lsProductViews;
-            model.quangcao = quangcao;
-            model.TinTucs = TinTuc;
-            ViewBag.AllProducts = lsProducts;
-
             return View(model);
         }
+
+
 
         [Route("lien-he.html", Name = "Contact")]
         public IActionResult Contact()
         {
             return View();
         }
-
         [Route("gioi-thieu.html", Name = "About")]
         public IActionResult About()
         {

@@ -57,7 +57,7 @@ namespace SaiGonMarket.Controllers
             {
                 var khachhang = _context.Customers.AsNoTracking().SingleOrDefault(x => x.Phone.ToLower() == Phone.ToLower());
                 if (khachhang != null)
-                    return Json(data: "Phone number: " + Phone + " Phone number already in use ");
+                    return Json(data: "Số điện thoại: " + Phone + " đã được sử dụng.");
                 return Json(data: true);
             }
             catch
@@ -74,7 +74,7 @@ namespace SaiGonMarket.Controllers
             {
                 var khachhang = _context.Customers.AsNoTracking().SingleOrDefault(x => x.Email.ToLower() == Email.ToLower());
                 if (khachhang != null)
-                    return Json(data: "Email: " + Email + " Email already in use ");
+                    return Json(data: "Email: " + Email + " đã được sử dụng.");
                 return Json(data: true);
             }
             catch
@@ -100,6 +100,7 @@ namespace SaiGonMarket.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    bool isEmail = Utilities.IsValidEmail(taikhoan.Email);
                     string salt = Utilities.GetRandomKey();
                     Customer khachhang = new Customer
                     {
@@ -127,7 +128,7 @@ namespace SaiGonMarket.Controllers
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "login");
                         ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                         await HttpContext.SignInAsync(claimsPrincipal);
-                        _notyfService.Success("Login Successfully!");
+                        _notyfService.Success("Đăng nhập thành công");
                         return RedirectToAction("Dashboard", "Accounts");
                     }
                     catch (Exception ex)
@@ -180,13 +181,16 @@ namespace SaiGonMarket.Controllers
                     string pass = (customer.Password + khachhang.Salt.Trim()).ToMD5();
                     if (khachhang.Password != pass)
                     {
-                        _notyfService.Error("Wrong credentials invalid username or password!");
+                        _notyfService.Error("Tên người dùng hoặc mật khẩu không hợp lệ!");
                         return View(customer);
                     }
 
                     //kt tai khoan co active khong
-                    if (khachhang.Active == false) return RedirectToAction("ThongBao", "Accounts");
-
+                    if (khachhang.Active == false)
+                    {
+                        _notyfService.Error("Tài khoản của bạn đã bị khóa!");
+                        return RedirectToAction();
+                    }
                     //luu session maKH
                     HttpContext.Session.SetString("CustomerId", khachhang.CustomerId.ToString());
                     var taikhoanID = HttpContext.Session.GetString("CustomerId");
@@ -200,7 +204,7 @@ namespace SaiGonMarket.Controllers
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "login");
                     ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(claimsPrincipal);
-                    _notyfService.Success("Login Successfully!");
+                    _notyfService.Success("Đăng nhập thành công");
                     return RedirectToAction("Dashboard", "Accounts");
                 }
             }
@@ -212,7 +216,7 @@ namespace SaiGonMarket.Controllers
         }
 
         [HttpGet]
-        [Route("dang-xuat.html", Name = "Logout")]
+        [Route("dang-xuat.html", Name = "DangXuat")]
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync();
@@ -241,17 +245,17 @@ namespace SaiGonMarket.Controllers
                         taikhoan.Password = passnew;
                         _context.Update(taikhoan);
                         _context.SaveChanges();
-                        _notyfService.Success("Changed password successfully");
+                        _notyfService.Success("Thay đổi mật khẩu thành công");
                         return RedirectToAction("Dashboard", "Accounts");
                     }
                 }
             }
             catch
             {
-                _notyfService.Error("Password change failed");
+                _notyfService.Error("Thay đổi mật khẩu không thành công");
                 return RedirectToAction("Dashboard", "Accounts");
             }
-            _notyfService.Error("Password change failed");
+            _notyfService.Error("Thay đổi mật khẩu không thành công");
             return RedirectToAction("Dashboard", "Accounts");
         }
     }

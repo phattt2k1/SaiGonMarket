@@ -9,9 +9,6 @@ namespace SaiGonMarket.Areas.Admin.Models
     public class LoginViewModel
     {
         [Key]
-        [Display(Name = "Email")]
-        [Required(ErrorMessage = "Vui lòng nhập email")]
-        public string Email { get; set; }
         [MaxLength(100)]
         [Required(ErrorMessage = ("Vui lòng nhập Email"))]
         [Display(Name = "Địa chỉ Email")]

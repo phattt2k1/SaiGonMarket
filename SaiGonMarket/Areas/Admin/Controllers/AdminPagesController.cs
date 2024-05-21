@@ -15,7 +15,7 @@ using SaiGonMarket.Models;
 namespace SaiGonMarket.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class AdminPagesController : Controller
     {
         private readonly dbMarketsContext _context;
